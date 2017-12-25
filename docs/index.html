@@ -7,8 +7,73 @@
         <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT"/>
         <meta http-equiv="pragma" content="no-cache" />
         <meta name="viewport" content="width=350">
+
+        <style>
+            body {
+                width: 100%;
+            }
+            #main {
+                margin: 0 auto;
+                border-collapse: separate;
+                border-spacing: 1px;
+                background-color: blue;
+            }
+
+            #main td {
+                background-color: black;
+            }
+
+            #main td.wall {
+                background-color: gray;
+            }
+        </style>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", () => { 
+                var cellSize = window.innerHeight/25;
+                var table = document.getElementById("main");
+
+                var rowIndex = 0;
+                while (rowIndex < 20){
+                    var row = table.insertRow(table.rows.length);
+
+                    var cell = row.insertCell(row.length);
+                    cell.style.height = cellSize;
+                    cell.style.width = cellSize;
+                    cell.classList.add("wall");
+                    
+                    var cellIndex = 0;
+                    while (cellIndex < 10){
+                        var cell = row.insertCell(row.length);
+                        cell.style.height = cellSize;
+                        cell.style.width = cellSize;
+                        cellIndex = cellIndex + 1;
+                    }
+
+                    var cell = row.insertCell(row.length);
+                    cell.style.height = cellSize;
+                    cell.style.width = cellSize;
+                    cell.classList.add("wall");
+
+                    rowIndex = rowIndex + 1;
+                }
+
+                var row = table.insertRow(table.rows.length);
+                var cellIndex = 0;
+                while (cellIndex < 12){       
+                    var cell = row.insertCell(row.length);
+                    cell.style.height = cellSize;
+                    cell.style.width = cellSize;
+                    cell.classList.add("wall");
+
+                    cellIndex = cellIndex + 1;
+                }
+            });
+        </script>
     </head>
     <body>
-        A Template
+        <table id = "main">
+
+        </table>        
     </body>
 </html>
