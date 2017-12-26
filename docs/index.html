@@ -58,44 +58,65 @@
         
         <script>
             document.addEventListener("DOMContentLoaded", () => { 
-                var cellSize = window.innerHeight/25;
-                var table = document.getElementById("main");
+                function init() {
+                    var cellSize = window.innerHeight/25;
+                    var table = document.getElementById("main");
 
-                var rowIndex = 0;
-                while (rowIndex < 20){
-                    var row = table.insertRow(table.rows.length);
+                    var rowIndex = 0;
+                    while (rowIndex < 20){
+                        var row = table.insertRow(table.rows.length);
 
-                    var cell = row.insertCell(row.length);
-                    cell.style.height = cellSize;
-                    cell.style.width = cellSize;
-                    cell.classList.add("wall");
-                    
-                    var cellIndex = 0;
-                    while (cellIndex < 10){
                         var cell = row.insertCell(row.length);
                         cell.style.height = cellSize;
                         cell.style.width = cellSize;
+                        cell.classList.add("wall");
+                        
+                        var cellIndex = 0;
+                        while (cellIndex < 10){
+                            var cell = row.insertCell(row.length);
+                            cell.style.height = cellSize;
+                            cell.style.width = cellSize;
+                            cellIndex = cellIndex + 1;
+                        }
+
+                        var cell = row.insertCell(row.length);
+                        cell.style.height = cellSize;
+                        cell.style.width = cellSize;
+                        cell.classList.add("wall");
+
+                        rowIndex = rowIndex + 1;
+                    }
+
+                    var row = table.insertRow(table.rows.length);
+                    var cellIndex = 0;
+                    while (cellIndex < 12){       
+                        var cell = row.insertCell(row.length);
+                        cell.style.height = cellSize;
+                        cell.style.width = cellSize;
+                        cell.classList.add("wall");
+
                         cellIndex = cellIndex + 1;
                     }
 
-                    var cell = row.insertCell(row.length);
-                    cell.style.height = cellSize;
-                    cell.style.width = cellSize;
-                    cell.classList.add("wall");
-
-                    rowIndex = rowIndex + 1;
+                    return table;
                 }
 
-                var row = table.insertRow(table.rows.length);
-                var cellIndex = 0;
-                while (cellIndex < 12){       
-                    var cell = row.insertCell(row.length);
-                    cell.style.height = cellSize;
-                    cell.style.width = cellSize;
-                    cell.classList.add("wall");
+                function showFigure(figure) {
+                    var figurePosition = figure.position;
+                    var figureType = figure.figureType; 
 
-                    cellIndex = cellIndex + 1;
-                }
+                    var tileIndex = 0;
+                    while (tileIndex<figureType.offsets.length){
+                        var tile = figureType.offsets[tileIndex];
+                        var tileX = figurePosition.x + tile.x;
+                        var tileY = figurePosition.y + tile.y;
+                        table.rows[tileY].cells[tileX].classList.add(figureType.class);
+
+                        tileIndex = tileIndex + 1;
+                    }
+                } 
+
+                var table = init();
 
                 var figureTypes = [
                     { class: "figure1", offsets: [{x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}]},
@@ -120,19 +141,8 @@
                 var figureIndex = 0;
                 while (figureIndex < figures.length) {
                     var figure = figures [figureIndex];
-                    var figurePosition = figure.position;
-                    var figureType = figure.figureType; 
 
-                    var tileIndex = 0;
-                    while (tileIndex<figureType.offsets.length){
-                        var tile = figureType.offsets[tileIndex];
-                        var tileX = figurePosition.x + tile.x;
-                        var tileY = figurePosition.y + tile.y;
-                        table.rows[tileY].cells[tileX].classList.add(figureType.class);
-
-                        tileIndex = tileIndex + 1;
-                    }
-
+                    showFigure(figure);
                     figureIndex = figureIndex + 1;
                 }
             });
