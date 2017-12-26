@@ -27,8 +27,32 @@
                 background-color: gray;
             }
 
-            #main td.tile {
+            #main td.figure1 {
                 background-color: red;
+            }
+
+            #main td.figure2 {
+                background-color: blue;
+            }
+
+            #main td.figure3 {
+                background-color: green;
+            }
+
+            #main td.figure4 {
+                background-color: yellow;
+            }
+
+            #main td.figure5 {
+                background-color: white;
+            }
+
+            #main td.figure6 {
+                background-color: orange;
+            }
+
+            #main td.figure7 {
+                background-color: cyan;
             }
         </style>
         
@@ -73,32 +97,44 @@
                     cellIndex = cellIndex + 1;
                 }
 
-                var figures = [
-                    [ {x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}],
-                    [ {x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}, {x:-1, y: 1}],
-                    [ {x: 0, y:-1}, {x: 0, y: 0}, {x: 0, y: 1}, {x: 0, y: 2}],
-                    [ {x: 0, y: 0}, {x:-1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}],
-                    [ {x: 0, y: 0}, {x:-1, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}],
-                    [ {x: 0, y: 0}, {x:-1, y: 0}, {x: 0, y:-1}, {x: 0, y:-2}],
-                    [ {x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y:-1}, {x: 0, y:-2}],
+                var figureTypes = [
+                    { class: "figure1", offsets: [{x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}]},
+                    { class: "figure2", offsets: [{x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}, {x:-1, y: 1}]},
+                    { class: "figure3", offsets: [{x: 0, y:-1}, {x: 0, y: 0}, {x: 0, y: 1}, {x: 0, y: 2}]},
+                    { class: "figure4", offsets: [{x: 0, y: 0}, {x:-1, y: 0}, {x: 0, y: 1}, {x: 1, y: 1}]},
+                    { class: "figure5", offsets: [{x: 0, y: 0}, {x:-1, y: 0}, {x: 1, y: 0}, {x: 0, y: 1}]},
+                    { class: "figure6", offsets: [{x: 0, y: 0}, {x:-1, y: 0}, {x: 0, y:-1}, {x: 0, y:-2}]},
+                    { class: "figure7", offsets: [{x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y:-1}, {x: 0, y:-2}]},
                 ];
 
-                var position = {
-                    x: 5, 
-                    y: 3
+                var figures = [
+                    { position: { x: 5, y: 5 }, figureType: figureTypes[0] },
+                    { position: { x: 5, y: 9 }, figureType: figureTypes[1] },
+                    { position: { x: 5, y: 14 }, figureType: figureTypes[2] },
+                    { position: { x: 2, y: 3 }, figureType: figureTypes[3] },
+                    { position: { x: 7, y: 3 }, figureType: figureTypes[4] },
+                    { position: { x: 2, y: 7 }, figureType: figureTypes[5] },
+                    { position: { x: 3, y: 8 }, figureType: figureTypes[6] },
+                ];
+
+                var figureIndex = 0;
+                while (figureIndex < figures.length) {
+                    var figure = figures [figureIndex];
+                    var figurePosition = figure.position;
+                    var figureType = figure.figureType; 
+
+                    var tileIndex = 0;
+                    while (tileIndex<figureType.offsets.length){
+                        var tile = figureType.offsets[tileIndex];
+                        var tileX = figurePosition.x + tile.x;
+                        var tileY = figurePosition.y + tile.y;
+                        table.rows[tileY].cells[tileX].classList.add(figureType.class);
+
+                        tileIndex = tileIndex + 1;
+                    }
+
+                    figureIndex = figureIndex + 1;
                 }
-                var figure = figures[6];
-
-                var index = 0;
-                while (index<figure.length){
-                    var tile = figure[index];
-                    var tileX = position.x + tile.x;
-                    var tileY = position.y + tile.y;
-                    table.rows[tileY].cells[tileX].classList.add("tile");
-
-                    index = index + 1;
-                }
-
             });
         </script>
     </head>
