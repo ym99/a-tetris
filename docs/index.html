@@ -101,16 +101,27 @@
                     return table;
                 }
 
-                function showFigure(figure) {
-                    var figurePosition = figure.position;
-                    var figureType = figure.figureType; 
-
+                function showFigure(show) {
                     var tileIndex = 0;
-                    while (tileIndex<figureType.offsets.length){
-                        var tile = figureType.offsets[tileIndex];
-                        var tileX = figurePosition.x + tile.x;
-                        var tileY = figurePosition.y + tile.y;
-                        table.rows[tileY].cells[tileX].classList.add(figureType.class);
+                    while (tileIndex < figure.figureType.offsets.length){
+                        var tile = figure.figureType.offsets[tileIndex];
+                        var rotatedTile = rotates[figure.rotate](tile);
+
+                        if (show) {
+                            table
+                                .rows[figure.position.y + rotatedTile.y]
+                                .cells[figure.position.x + rotatedTile.x]
+                                .classList
+                                .add(figure.figureType.class)
+                            ;
+                        } else {
+                            table
+                                .rows[figure.position.y + rotatedTile.y]
+                                .cells[figure.position.x + rotatedTile.x]
+                                .classList
+                                .remove(figure.figureType.class)
+                            ;
+                        }
 
                         tileIndex = tileIndex + 1;
                     }
@@ -128,6 +139,13 @@
                     { class: "figure7", offsets: [{x: 0, y: 0}, {x: 1, y: 0}, {x: 0, y:-1}, {x: 0, y:-2}]},
                 ];
 
+                var rotates = [
+                    (tile) => ({ x: tile.x, y: tile.y }),
+                    (tile) => ({ x:-tile.y, y: tile.x }),
+                    (tile) => ({ x:-tile.x, y:-tile.y }),
+                    (tile) => ({ x: tile.y, y:-tile.x })
+                ];
+/*
                 var figures = [
                     { position: { x: 5, y: 5 }, figureType: figureTypes[0] },
                     { position: { x: 5, y: 9 }, figureType: figureTypes[1] },
@@ -145,6 +163,40 @@
                     showFigure(figure);
                     figureIndex = figureIndex + 1;
                 }
+*/
+
+                var figure = { 
+                    position: { x: 5, y: 14 }, 
+                    rotate: 0,
+                    figureType: figureTypes[2] 
+                };
+                showFigure(true);
+
+                document.addEventListener("keydown", (e) => {
+                    e = e || window.event;
+                    if (e.keyCode === 37){
+                        showFigure(false);
+
+                        figure.position.x = figure.position.x - 1;
+
+                        showFigure(true);
+                    }
+                    if (e.keyCode === 39){
+                        showFigure(false);
+
+                        figure.position.x = figure.position.x + 1;
+
+                        showFigure(true);
+                    }
+                    if (e.keyCode === 38){
+                        showFigure(false);
+
+                        figure.rotate = (figure.rotate + 1) % 4;
+
+                        showFigure(true);
+                    }
+
+                });
             });
         </script>
     </head>
