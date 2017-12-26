@@ -101,23 +101,36 @@
                     return table;
                 }
 
+                function createFigure(){
+                    return {
+                        position: {
+                            x: Math.floor(table.rows[0].cells.length / 2),
+                            y: 1
+                        },
+                        rotate: 0,
+                        figureType: figureTypes[Math.floor(Math.random() * figureTypes.length)]
+                    };
+                }
+
                 function showFigure(show) {
                     var tileIndex = 0;
                     while (tileIndex < figure.figureType.offsets.length){
                         var tile = figure.figureType.offsets[tileIndex];
                         var rotatedTile = rotates[figure.rotate](tile);
+                        var x = figure.position.x + rotatedTile.x;
+                        var y = figure.position.y + rotatedTile.y;
 
                         if (show) {
                             table
-                                .rows[figure.position.y + rotatedTile.y]
-                                .cells[figure.position.x + rotatedTile.x]
+                                .rows[y]
+                                .cells[x]
                                 .classList
                                 .add(figure.figureType.class)
                             ;
                         } else {
                             table
-                                .rows[figure.position.y + rotatedTile.y]
-                                .cells[figure.position.x + rotatedTile.x]
+                                .rows[y]
+                                .cells[x]
                                 .classList
                                 .remove(figure.figureType.class)
                             ;
@@ -125,6 +138,40 @@
 
                         tileIndex = tileIndex + 1;
                     }
+                }
+
+                function cloneFigure() {
+                    return {
+                        position: {
+                            x: figure.position.x,
+                            y: figure.position.y
+                        },
+                        rotate: figure.rotate,
+                        figureType: figure.figureType
+                    };
+                }
+
+                function check(newFigure){
+                    var tileIndex = 0;
+                    while (tileIndex < newFigure.figureType.offsets.length){
+                        var tile = newFigure.figureType.offsets[tileIndex];
+                        var rotatedTile = rotates[newFigure.rotate](tile);
+                        var x = newFigure.position.x + rotatedTile.x;
+                        var y = newFigure.position.y + rotatedTile.y;
+
+                        if (x <= 0) {
+                            return 'dont';
+                        }
+                        if (x >= table.rows[0].cells.length - 1){
+                            return 'dont';
+                        }
+                        if (y >= table.rows.length - 1){
+                            return 'stop';
+                        }
+                        tileIndex = tileIndex + 1;
+                    }
+
+                    return 'ok';
                 } 
 
                 var table = init();
@@ -165,11 +212,7 @@
                 }
 */
 
-                var figure = { 
-                    position: { x: 5, y: 14 }, 
-                    rotate: 0,
-                    figureType: figureTypes[2] 
-                };
+                var figure = createFigure(); 
                 showFigure(true);
 
                 document.addEventListener("keydown", (e) => {
@@ -177,28 +220,71 @@
                     if (e.keyCode === 37){
                         showFigure(false);
 
-                        figure.position.x = figure.position.x - 1;
+                        var newFigure = cloneFigure();
+                        newFigure.position.x = figure.position.x - 1;
+
+                        var result = check(newFigure);
+                        if (result === 'ok') {
+                            figure = newFigure;
+                        }
+                        if (result === 'stop') {
+                            showFigure(true);
+
+                            figure = createFigure();    
+                        }
 
                         showFigure(true);
                     }
                     if (e.keyCode === 39){
                         showFigure(false);
 
-                        figure.position.x = figure.position.x + 1;
+                        var newFigure = cloneFigure();
+                        newFigure.position.x = figure.position.x + 1;
 
+                        var result = check(newFigure);
+                        if (result === 'ok') {
+                            figure = newFigure;
+                        }
+                        if (result === 'stop') {
+                            showFigure(true);
+
+                            figure = createFigure();    
+                        }
+                        
                         showFigure(true);
                     }
                     if (e.keyCode === 38){
                         showFigure(false);
 
-                        figure.rotate = (figure.rotate + 1) % 4;
+                        var newFigure = cloneFigure();
+                        newFigure.rotate = (newFigure.rotate + 1) % 4;
+                        var result = check(newFigure);
+                        if (result === 'ok') {
+                            figure = newFigure;
+                        }
+                        if (result === 'stop') {
+                            showFigure(true);
+
+                            figure = createFigure();    
+                        }
 
                         showFigure(true);
                     }
                     if (e.keyCode === 40){
                         showFigure(false);
+                        
+                        var newFigure = cloneFigure();
+                        newFigure.position.y = figure.position.y + 1;
 
-                        figure.position.y = figure.position.y + 1;
+                        var result = check(newFigure);
+                        if (result === 'ok') {
+                            figure = newFigure;
+                        }
+                        if (result === 'stop') {
+                            showFigure(true);
+
+                            figure = createFigure();    
+                        }
 
                         showFigure(true);
                     }
