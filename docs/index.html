@@ -195,6 +195,13 @@
 
                         showFigure(true);
                     }
+                    if (e.keyCode === 40){
+                        showFigure(false);
+
+                        figure.position.y = figure.position.y + 1;
+
+                        showFigure(true);
+                    }
 
                 });
             });
