@@ -23,6 +23,10 @@
                 background-color: black;
             }
 
+            #main.stop td {
+                background-color:red;
+            }
+
             #main td.wall {
                 background-color: gray;
             }
@@ -169,32 +173,46 @@
                             return 'stop';
                         }
 
-                        var figureIndex = 0;
-                        while (figureIndex < figures.length){
-                            var oldFigure = figures[figureIndex];
+                        var oldTileIndex = 0;
+                        while (oldTileIndex < tiles.length){
+                            var oldTile = tiles[oldTileIndex];
 
-                            var oldTileIndex = 0;
-                            while (oldTileIndex < oldFigure.figureType.offsets.length){
-                                var oldTile = oldFigure.figureType.offsets[oldTileIndex];
-                                var oldRotatedTile = rotates[oldFigure.rotate](oldTile);
-                                var oldX = oldFigure.position.x + oldRotatedTile.x;
-                                var oldY = oldFigure.position.y + oldRotatedTile.y;
+                            if (x === oldTile.x && y === oldTile.y){
+                                return 'stop';
+                            }    
 
-                                if (x === oldX && y === oldY){
-                                    return 'stop';
-                                }    
-
-                                oldTileIndex = oldTileIndex + 1;                                
-                            }
-                            figureIndex = figureIndex + 1;
+                            oldTileIndex = oldTileIndex + 1;                                
                         }
+
                         tileIndex = tileIndex + 1;
                     }
 
                     return 'ok';
                 } 
 
+                function addFigureToTiles() {
+                    var tileIndex = 0;
+                    while (tileIndex < figure.figureType.offsets.length){
+                        var tile = figure.figureType.offsets[tileIndex];
+                        var rotatedTile = rotates[figure.rotate](tile);
+                        var x = figure.position.x + rotatedTile.x;
+                        var y = figure.position.y + rotatedTile.y;
+
+                        tiles.push({
+                            class: figure.figureType.class,
+                            x: x,
+                            y: y
+                        });
+
+                        tileIndex = tileIndex + 1;
+                    }
+                }
+
                 function onTimer() {
+                    if (figure === null) {
+                        return;
+                    }
+                    
                     showFigure(false);
                         
                     var newFigure = cloneFigure();
@@ -207,10 +225,13 @@
                     if (result === 'stop') {
                         showFigure(true);
 
-                        figures.push(figure);
+                        addFigureToTiles();
                         figure = createFigure();
                         if (check(figure) !== 'ok'){
-                            // todo
+                            table.classList.add("stop");
+                            showFigure (true);
+                            figure = null;
+                            return;
                         }  
                     }
 
@@ -237,12 +258,16 @@
                     (tile) => ({ x: tile.y, y:-tile.x })
                 ];
 
-                var figures = [];
+                var tiles = [];
 
                 var figure = createFigure(); 
                 showFigure(true);
 
                 document.addEventListener("keydown", (e) => {
+                    if (figure === null) {
+                        return;
+                    }
+
                     e = e || window.event;
                     if (e.keyCode === 37){ // left arrow
                         showFigure(false);
@@ -257,11 +282,14 @@
                         if (result === 'stop') {
                             showFigure(true);
 
-                            figures.push(figure);
+                            addFigureToTiles();
                             figure = createFigure();
                             if (check(figure) !== 'ok'){
-                            // todo
-                        }    
+                                table.classList.add("stop");
+                                showFigure (true);
+                                figure = null;
+                                return;
+                            }    
                         }
 
                         showFigure(true);
@@ -279,11 +307,14 @@
                         if (result === 'stop') {
                             showFigure(true);
 
-                            figures.push(figure);
+                            addFigureToTiles();
                             figure = createFigure();
                             if (check(figure) !== 'ok'){
-                            // todo
-                        }    
+                                table.classList.add("stop");
+                                showFigure (true);
+                                figure = null;
+                                return;
+                            }    
                         }
                         
                         showFigure(true);
@@ -300,11 +331,14 @@
                         if (result === 'stop') {
                             showFigure(true);
 
-                            figures.push(figure);
+                            addFigureToTiles();
                             figure = createFigure();
                             if (check(figure) !== 'ok'){
-                            // todo
-                        }    
+                                table.classList.add("stop");
+                                showFigure (true);
+                                figure = null;
+                                return;
+                            }    
                         }
 
                         showFigure(true);
@@ -322,10 +356,13 @@
                         if (result === 'stop') {
                             showFigure(true);
 
-                            figures.push(figure);
+                            addFigureToTiles();
                             figure = createFigure();
                             if (check(figure) !== 'ok'){
-                                // todo
+                                table.classList.add("stop");
+                                showFigure (true);
+                                figure = null;
+                                return;
                             }    
                         }
 
