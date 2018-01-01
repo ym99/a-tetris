@@ -194,6 +194,27 @@
                     return 'ok';
                 } 
 
+                function onTimer() {
+                    showFigure(false);
+                        
+                    var newFigure = cloneFigure();
+                    newFigure.position.y = figure.position.y + 1;
+
+                    var result = check(newFigure);
+                    if (result === 'ok') {
+                        figure = newFigure;
+                    }
+                    if (result === 'stop') {
+                        showFigure(true);
+
+                        figures.push(figure);
+                        figure = createFigure();    
+                    }
+
+                    showFigure(true);
+                    window.setTimeout(onTimer, 500 );
+                }
+
                 var table = init();
 
                 var figureTypes = [
@@ -295,8 +316,9 @@
 
                         showFigure(true);
                     }
-
                 });
+
+                window.setTimeout(onTimer, 500);
             });
         </script>
     </head>
