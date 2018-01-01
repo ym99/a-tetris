@@ -168,6 +168,26 @@
                         if (y >= table.rows.length - 1){
                             return 'stop';
                         }
+
+                        var figureIndex = 0;
+                        while (figureIndex < figures.length){
+                            var oldFigure = figures[figureIndex];
+
+                            var oldTileIndex = 0;
+                            while (oldTileIndex < oldFigure.figureType.offsets.length){
+                                var oldTile = oldFigure.figureType.offsets[oldTileIndex];
+                                var oldRotatedTile = rotates[oldFigure.rotate](oldTile);
+                                var oldX = oldFigure.position.x + oldRotatedTile.x;
+                                var oldY = oldFigure.position.y + oldRotatedTile.y;
+
+                                if (x === oldX && y === oldY){
+                                    return 'stop';
+                                }    
+
+                                oldTileIndex = oldTileIndex + 1;                                
+                            }
+                            figureIndex = figureIndex + 1;
+                        }
                         tileIndex = tileIndex + 1;
                     }
 
@@ -192,32 +212,15 @@
                     (tile) => ({ x:-tile.x, y:-tile.y }),
                     (tile) => ({ x: tile.y, y:-tile.x })
                 ];
-/*
-                var figures = [
-                    { position: { x: 5, y: 5 }, figureType: figureTypes[0] },
-                    { position: { x: 5, y: 9 }, figureType: figureTypes[1] },
-                    { position: { x: 5, y: 14 }, figureType: figureTypes[2] },
-                    { position: { x: 2, y: 3 }, figureType: figureTypes[3] },
-                    { position: { x: 7, y: 3 }, figureType: figureTypes[4] },
-                    { position: { x: 2, y: 7 }, figureType: figureTypes[5] },
-                    { position: { x: 3, y: 8 }, figureType: figureTypes[6] },
-                ];
 
-                var figureIndex = 0;
-                while (figureIndex < figures.length) {
-                    var figure = figures [figureIndex];
-
-                    showFigure(figure);
-                    figureIndex = figureIndex + 1;
-                }
-*/
+                var figures = [];
 
                 var figure = createFigure(); 
                 showFigure(true);
 
                 document.addEventListener("keydown", (e) => {
                     e = e || window.event;
-                    if (e.keyCode === 37){
+                    if (e.keyCode === 37){ // left arrow
                         showFigure(false);
 
                         var newFigure = cloneFigure();
@@ -230,12 +233,13 @@
                         if (result === 'stop') {
                             showFigure(true);
 
+                            figures.push(figure);
                             figure = createFigure();    
                         }
 
                         showFigure(true);
                     }
-                    if (e.keyCode === 39){
+                    if (e.keyCode === 39){ // right arrow
                         showFigure(false);
 
                         var newFigure = cloneFigure();
@@ -248,12 +252,13 @@
                         if (result === 'stop') {
                             showFigure(true);
 
+                            figures.push(figure);
                             figure = createFigure();    
                         }
                         
                         showFigure(true);
                     }
-                    if (e.keyCode === 38){
+                    if (e.keyCode === 38){ // up arrow to rotate
                         showFigure(false);
 
                         var newFigure = cloneFigure();
@@ -265,12 +270,13 @@
                         if (result === 'stop') {
                             showFigure(true);
 
+                            figures.push(figure);
                             figure = createFigure();    
                         }
 
                         showFigure(true);
                     }
-                    if (e.keyCode === 40){
+                    if (e.keyCode === 40){ // down arrow
                         showFigure(false);
                         
                         var newFigure = cloneFigure();
@@ -283,6 +289,7 @@
                         if (result === 'stop') {
                             showFigure(true);
 
+                            figures.push(figure);
                             figure = createFigure();    
                         }
 
