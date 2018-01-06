@@ -245,7 +245,36 @@
                                 }
                             }
 
-                            
+                            var yMove = y - 1;
+                            while (yMove >= 0){
+
+                                var tileIndex = 0;
+                                while (tileIndex < tiles.length){
+                                    var tile = tiles[tileIndex];
+
+                                    if(tile.y === yMove){
+                                        table
+                                            .rows[tile.y]
+                                            .cells[tile.x]
+                                            .classList
+                                            .remove(tile.class)
+                                        ;
+
+                                        tile.y = tile.y + 1;
+
+                                        table
+                                            .rows[tile.y]
+                                            .cells[tile.x]
+                                            .classList
+                                            .add(tile.class)
+                                        ;
+                                    }
+                                    
+                                    tileIndex = tileIndex + 1;
+                                }
+
+                                yMove = yMove - 1;
+                            }
                         }
 
                         yIndex = yIndex + 1;
